@@ -1,0 +1,20 @@
+body {
+  font-family: 'Verdana';
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+
+
+  article {
+    background-color: #ddd;
+    border-radius: 7px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    &:nth-child(odd) {
+      background-color: #eee;
+    }
+  }
+}
