@@ -1,3 +1,6 @@
+import createCategorySelect from "./createCategorySelect.js";
+import createSortSelect from "./createSortSelect.js";
+
 // Note: The short multiline comments before
 // some of the template literals (/*html*/`...`)
 // triggers the VSC extension leet-html (if installed)
@@ -10,7 +13,11 @@
 // Read products from json file/url
 let products = await (await fetch('products.json')).json();
 
-export default function displayProducts(main, filterOnCategory = 'All products') {
+export default function displayProducts(
+  main,
+  filterOnCategory = 'All products',
+  sortOn = 'A-Z'
+) {
 
   // If you want to make a variable a global add it 
   // to globalThis/window as a property
@@ -22,10 +29,17 @@ export default function displayProducts(main, filterOnCategory = 'All products')
   main.innerHTML = `
     <h1>Our products</h1>
     ${createCategorySelect(products, filterOnCategory)}
+    ${createSortSelect(sortOn)}
     <p>Some of our amazing products:</p>
     ${products
       .filter(({ category }) =>
         filterOnCategory === 'All products' || category === filterOnCategory)
+      .sort((a, b) => {
+        if (sortOn === 'A-Z') { return a.name > b.name ? 1 : -1; }
+        if (sortOn === 'Z-A') { return b.name > a.name ? 1 : -1; }
+        if (sortOn === 'Price (low->high)') { return a.price - b.price; }
+        if (sortOn === 'Price(high->low)') { return b.price - a.price; }
+      })
       .map(({ name, description, price, category }) => /*html*/`
       <article>
         <h3>${name}</h3>
@@ -36,36 +50,18 @@ export default function displayProducts(main, filterOnCategory = 'All products')
     `).join('')}
   `;
 
-  // Add event handler for changes to category filtering
-  document.querySelector('select[name="filter-category"]').addEventListener('change', event => {
-    // display products again with the new category filter value
-    displayProducts(main, event.target.value);
-  });
+  // Event handler function for changes to any of our selects
+  // When one the select change call displayProducts again
+  // when the current values of both or selects
+  let handler = () => {
+    displayProducts(
+      main,
+      document.querySelector('select[name="filter-category"]').value,
+      document.querySelector('select[name="sort"]').value
+    );
+  };
 
-}
-
-function getAllProductsCategories(products) {
-  // What happens?
-  // 1. We map so that we get an array of strings (categories) with a lot of duplicates
-  // 2. We create set from the array - that removes all duplicates
-  // 3. We convert the set to a new array using ... - the spread operator: [...somethingInterable]
-  return ['All products', ...new Set(products.map(({ category }) => category))];
-}
-
-function createCategorySelect(products, filterOnCategory) {
-  let categories = getAllProductsCategories(products);
-  return `
-    <label>
-      Categories:
-      <select name="filter-category">
-        ${categories.map(category => /*html*/`
-          <option
-            ${category === filterOnCategory ? 'selected' : ''}
-          >
-            ${category}
-          </option>
-        `).join('')}
-      </select>
-    </label>
-  `;
+  // Add event handler for our two selects (filter select and sort select)
+  document.querySelector('select[name="filter-category"]').addEventListener('change', handler);
+  document.querySelector('select[name="sort"]').addEventListener('change', handler);
 }
