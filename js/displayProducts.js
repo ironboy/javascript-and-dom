@@ -7,7 +7,7 @@
 // the JavaScript engine that we'll do that by adding async
 // to the function declaration
 export default async function displayProducts(main) {
-  // Read products from json file
+  // Read products from json file/url
   let products = await (await fetch('products.json')).json();
 
   // If you want to make a variable a global add it 
