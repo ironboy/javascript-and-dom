@@ -1,3 +1,8 @@
+// Note: The short multiline comments before
+// some of the template literals (/*html*/`...`)
+// triggers the VSC extension leet-html (if installed)
+// so that it highlights the string as HTML
+
 // In order to use await inside function we must tell 
 // the JavaScript engine that we'll do that by adding async
 // to the function declaration
