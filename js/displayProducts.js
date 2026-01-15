@@ -16,7 +16,7 @@ export default function displayProducts(main, filterOnCategory = 'All products')
   // to globalThis/window as a property
   // ADVANTAGE: 
   // You can now inspect the variable in the browser console
-  // globalThis.products = products;
+  globalThis.products = products;
 
   // Add som content inside main
   main.innerHTML = `
@@ -64,7 +64,7 @@ function createCategorySelect(products, filterOnCategory) {
           >
             ${category}
           </option>
-        `)}
+        `).join('')}
       </select>
     </label>
   `;
