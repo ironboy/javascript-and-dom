@@ -38,7 +38,7 @@ function getAllProductsCategories(products) {
   // What happens?
   // 1. We map so that we get an array of strings (categories) with a lot of duplicates
   // 2. We create set from the array - that removes all duplicates
-  // 3. We convert the set to a new array using the spread operator [...somethingInterable]
+  // 3. We convert the set to a new array using ... - the spread operator: [...somethingInterable]
   return ['All products', ...new Set(products.map(({ category }) => category))];
 }
 
