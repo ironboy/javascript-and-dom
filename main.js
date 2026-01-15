@@ -21,9 +21,9 @@ let main = document.createElement('main');
 
 // Add som content inside main
 main.innerHTML = `
-<h1>Our products</h1>
-<p>Some of our amazing products:</p>
-${htmlForProducts}
+  <h1>Our products</h1>
+  <p>Some of our amazing products:</p>
+  ${htmlForProducts}
 `;
 
 // Grab the body element
