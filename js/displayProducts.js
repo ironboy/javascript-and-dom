@@ -35,10 +35,18 @@ export default function displayProducts(
       .filter(({ category }) =>
         filterOnCategory === 'All products' || category === filterOnCategory)
       .sort((a, b) => {
-        if (sortOn === 'A-Z') { return a.name > b.name ? 1 : -1; }
+        // using a POJO (a normal JS object - plain old JS object)
+        // as a very terse alternative to switch case is sometimes rather readable
+        return {
+          'A-Z': () => a.name > b.name ? 1 : -1,
+          'Z-A': () => b.name > a.name ? 1 : -1,
+          'Price (low->high)': () => a.price - b.price,
+          'Price (high->low)': () => b.price - a.price
+        }[sortOn]();
+        /*if (sortOn === 'A-Z') { return a.name > b.name ? 1 : -1; }
         if (sortOn === 'Z-A') { return b.name > a.name ? 1 : -1; }
         if (sortOn === 'Price (low->high)') { return a.price - b.price; }
-        if (sortOn === 'Price(high->low)') { return b.price - a.price; }
+        if (sortOn === 'Price (high->low)') { return b.price - a.price; }*/
       })
       .map(({ name, description, price, category }) => /*html*/`
       <article>

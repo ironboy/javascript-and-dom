@@ -1,5 +1,5 @@
 export default function createSortSelect(sortOn) {
-  let sortTypes = ['A-Z', 'Z-A', 'Price (low->high)', 'Price(high->low)'];
+  let sortTypes = ['A-Z', 'Z-A', 'Price (low->high)', 'Price (high->low)'];
   return /*html*/`
     <label>
       &nbsp;&nbsp;Sort:
