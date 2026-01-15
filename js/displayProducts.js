@@ -3,12 +3,14 @@
 // triggers the VSC extension leet-html (if installed)
 // so that it highlights the string as HTML
 
-// In order to use await inside function we must tell 
-// the JavaScript engine that we'll do that by adding async
-// to the function declaration
-export default async function displayProducts(main) {
-  // Read products from json file/url
-  let products = await (await fetch('products.json')).json();
+// A number of "local" globals
+// variables declared outside function are available
+// in all code within the same file/module
+
+// Read products from json file/url
+let products = await (await fetch('products.json')).json();
+
+export default function displayProducts(main, filterOnCategory = 'All products') {
 
   // If you want to make a variable a global add it 
   // to globalThis/window as a property
@@ -19,10 +21,11 @@ export default async function displayProducts(main) {
   // Add som content inside main
   main.innerHTML = `
     <h1>Our products</h1>
-    ${createCategorySelect(products)}
+    ${createCategorySelect(products, filterOnCategory)}
     <p>Some of our amazing products:</p>
     ${products
-      .filter(({ category }) => category === 'Meat & Seafood')
+      .filter(({ category }) =>
+        filterOnCategory === 'All products' || category === filterOnCategory)
       .map(({ name, description, price, category }) => /*html*/`
       <article>
         <h3>${name}</h3>
@@ -32,6 +35,13 @@ export default async function displayProducts(main) {
       </article>
     `).join('')}
   `;
+
+  // Add event handler for changes to category filtering
+  document.querySelector('select[name="filter-category"]').addEventListener('change', event => {
+    // display products again with the new category filter value
+    displayProducts(main, event.target.value);
+  });
+
 }
 
 function getAllProductsCategories(products) {
@@ -42,13 +52,19 @@ function getAllProductsCategories(products) {
   return ['All products', ...new Set(products.map(({ category }) => category))];
 }
 
-function createCategorySelect(products) {
+function createCategorySelect(products, filterOnCategory) {
   let categories = getAllProductsCategories(products);
   return `
     <label>
       Categories:
-      <select>
-        ${categories.map(category => /*html*/`<option>${category}</option>`)}
+      <select name="filter-category">
+        ${categories.map(category => /*html*/`
+          <option
+            ${category === filterOnCategory ? 'selected' : ''}
+          >
+            ${category}
+          </option>
+        `)}
       </select>
     </label>
   `;
