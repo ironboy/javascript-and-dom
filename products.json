@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Ball",
+    "description": "A bouncy ball.",
+    "price": 35
+  },
+  {
+    "name": "Rubber duck",
+    "description": "Very rubbery duck",
+    "price": 62
+  },
+  {
+    "name": "Elephant",
+    "description": "A cute toy elephant",
+    "price": 135
+  }
+]

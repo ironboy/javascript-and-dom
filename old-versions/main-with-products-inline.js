@@ -1,10 +1,9 @@
-// Load products from products.json
-// await fetch(url) -> responseObject
-// await responseObject.json() -> deserialize from json to a data structure
-//
-// what is await - some things take time in js (like reading a file/ an url etc)
-// and await tells js to pause until we have a result to work with
-let products = await(await fetch('products.json')).json();
+// Our products as an array of objects
+let products = [
+  { name: 'Ball', description: 'A bouncy ball.', price: 35 },
+  { name: 'Rubber duck', description: 'Very rubbery duck', price: 62 },
+  { name: 'Elephant', description: 'A cute toy elephant', price: 135 }
+];
 
 let htmlForProducts = '';
 for (let product of products) {
