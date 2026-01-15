@@ -5,16 +5,46 @@ export default async function displayProducts(main) {
   // Read products from json file
   let products = await (await fetch('products.json')).json();
 
+  // If you want to make a variable a global add it 
+  // to globalThis/window as a property
+  // ADVANTAGE: 
+  // You can now inspect the variable in the browser console
+  // globalThis.products = products;
+
   // Add som content inside main
   main.innerHTML = `
-  <h1>Our products</h1>
-  <p>Some of our amazing products:</p>
-  ${products.map(({ name, description, price }) => /*html*/`
-    <article>
-      <h3>${name}</h3>
-      <p>${description}</p>
-      <p><b>Price:</b> ${price} SEK</p>
-    </article>
-  `).join('')}
-`;
+    <h1>Our products</h1>
+    ${createCategorySelect(products)}
+    <p>Some of our amazing products:</p>
+    ${products
+      .filter(({ category }) => category === 'Meat & Seafood')
+      .map(({ name, description, price, category }) => /*html*/`
+      <article>
+        <h3>${name}</h3>
+        <p><b>Category:</b> ${category}</b></p>
+        <p>${description}</p>
+        <p><b>Price:</b> ${price} SEK</p>
+      </article>
+    `).join('')}
+  `;
+}
+
+function getAllProductsCategories(products) {
+  // What happens?
+  // 1. We map so that we get an array of strings (categories) with a lot of duplicates
+  // 2. We create set from the array - that removes all duplicates
+  // 3. We convert the set to a new array using the spread operator [...somethingInterable]
+  return ['All products', ...new Set(products.map(({ category }) => category))];
+}
+
+function createCategorySelect(products) {
+  let categories = getAllProductsCategories(products);
+  return `
+    <label>
+      Categories:
+      <select>
+        ${categories.map(category => /*html*/`<option>${category}</option>`)}
+      </select>
+    </label>
+  `;
 }
